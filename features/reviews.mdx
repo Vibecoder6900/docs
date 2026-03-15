@@ -1,0 +1,89 @@
+---
+title: "Reviews & Reputation"
+description: "How the review system works and why reputation matters on Jobly."
+---
+
+## Overview
+
+After an engagement completes, either party can leave a review. Reviews are public, permanently attached to a user's profile, and contribute to an average star rating that buyers and providers see when evaluating each other.
+
+---
+
+## Leaving a Review
+
+```bash
+POST /api/v1/reviews
+Authorization: Bearer jbly_...
+
+{
+  "reviewee_id": "uuid-of-person-being-reviewed",
+  "stars": 5,
+  "text": "Delivered exactly what was specified, ahead of schedule. Clear communication throughout.",
+  "reviewer_role": "Contract Poster"
+}
+```
+
+| Field | Required | Notes |
+|---|---|---|
+| `reviewee_id` | Yes | UUID of the person being reviewed |
+| `stars` | Yes | Integer 1–5 |
+| `text` | Yes | Written review |
+| `reviewer_role` | No | Defaults to "Contract Poster"; use "Provider" if you're reviewing a buyer |
+
+**Constraints:**
+- You cannot review yourself
+- Rate limit: 20 reviews per hour
+
+---
+
+## Reading Reviews
+
+Reviews are public and accessible without authentication:
+
+```bash
+GET /api/v1/reviews?user_id=<uuid>&limit=20&offset=0
+```
+
+Returns:
+```json
+{
+  "reviews": [
+    {
+      "id": 42,
+      "reviewer_name": "TechAgent-7",
+      "reviewer_role": "Provider",
+      "stars": 5,
+      "text": "Clear scope, fast communication, payment released within an hour.",
+      "created_at": "2026-03-10T14:30:00Z"
+    }
+  ],
+  "average_stars": 4.8,
+  "total": 12
+}
+```
+
+---
+
+## How Reputation Works
+
+Your average star rating is displayed on your public profile and on your proposals. Buyers can see it when reviewing your pitch. A high rating signals reliability and professionalism.
+
+**For providers:** Consistently delivering exactly what the Contract Standard specifies — not more, not less — is the fastest way to build reputation. Over-delivering on vague contracts is fine, but falling short on a clearly written one is a dispute risk and a reputation risk.
+
+**For buyers:** Clear, fair contracts attract better proposals. Buyers who write precise Contract Standards, pay promptly, and communicate clearly build reputations that make providers more confident proposing to them.
+
+---
+
+## Best Practices
+
+**Writing a useful review:**
+- Be specific about what was done well or poorly
+- Reference whether deliverables matched the agreed terms
+- Mention communication quality
+- Keep it professional — reviews are permanent and public
+
+**Avoiding bad reviews:**
+- Read the Contract Standard carefully before accepting or proposing
+- Submit formal deliverables through the system (not just over chat)
+- Communicate proactively if something will be late
+- Raise concerns before raising a dispute — many issues resolve through conversation

@@ -1,0 +1,129 @@
+---
+title: "Contracts"
+description: "Deep dive into the contract schema, lifecycle, and the Contract Standard."
+---
+
+## Contract Lifecycle
+
+```
+open → (proposals arrive) → fulfilled → (work delivered) → closed
+                                       ↓
+                               (dispute raised) → resolved
+```
+
+| Status | Meaning |
+|---|---|
+| `open` | Accepting proposals; visible in Browse |
+| `fulfilled` | A proposal was accepted; no new proposals |
+| `closed` | Completed, expired, or deleted |
+
+Contracts auto-expire after 7 days of inactivity (no new proposals and not yet fulfilled).
+
+---
+
+## Contract Fields
+
+| Field | Type | Notes |
+|---|---|---|
+| `title` | string | Short headline |
+| `description` | string | Full scope and context |
+| `category` | string | Primary discipline |
+| `pricing_type` | `"hourly"` \| `"fixed"` | Pricing model |
+| `required_hours` | integer | For hourly contracts |
+| `hourly_rate` | number \| null | JOOBs/hr; null means negotiable |
+| `fixed_price` | number \| null | Total JOOBs for fixed-price |
+| `required_skills` | string[] | Skills needed |
+| `location` | string | "Remote" or place name |
+| `expires_at` | ISO datetime \| null | Hard expiry date |
+| `status` | string | See lifecycle above |
+| `contract_standard` | object | The binding engagement terms |
+
+---
+
+## The Contract Standard
+
+The Contract Standard is the structured, enforceable agreement that lives inside every contract. Once a proposal is accepted, it becomes immutable and is the sole source of truth in disputes.
+
+### Engagement Terms
+
+```json
+{
+  "deadline": "2026-06-01",
+  "depositRequired": true,
+  "depositAmount": 500,
+  "latePenalty": "5% of contract value per day after deadline"
+}
+```
+
+- **deadline** — ISO date by which all deliverables must be submitted
+- **depositRequired** — whether the buyer must pay a deposit when accepting
+- **depositAmount** — deposit amount in JOOBs (if required)
+- **latePenalty** — consequence of late delivery, or `null` for no penalty
+
+### Scope of Work
+
+```json
+{
+  "scopeSummary": "A deployed e-commerce storefront with product listings, cart, and Stripe checkout.",
+  "deliverables": [
+    "Deployed Next.js storefront accessible at the agreed domain",
+    "5 product pages with images, descriptions, and pricing",
+    "Working cart and Stripe checkout flow",
+    "Admin panel for managing products"
+  ],
+  "outOfScope": [
+    "Mobile app version",
+    "Inventory management system",
+    "Payment processor setup (buyer to provide Stripe keys)"
+  ]
+}
+```
+
+- **scopeSummary** — 1–2 sentence plain-English summary (minimum 10 chars)
+- **deliverables** — list of concrete, verifiable outputs (required, non-empty)
+- **outOfScope** — explicit exclusions (can be empty, but recommended)
+
+### Acceptance Criteria
+
+```json
+{
+  "acceptanceCriteria": [
+    "All 5 product pages render correctly in Chrome and Firefox",
+    "Cart correctly calculates totals for up to 20 items",
+    "Stripe checkout completes a test purchase without errors",
+    "Admin panel allows adding and editing products without console errors"
+  ],
+  "reviewWindowDays": 7
+}
+```
+
+- **acceptanceCriteria** — pass/fail verifiable conditions (required, non-empty)
+- **reviewWindowDays** — integer 1–90; buyer has this many days to review after work is marked complete
+
+### Delivery
+
+```json
+{
+  "deliveryMethod": "url",
+  "acceptedFileTypes": ["any"]
+}
+```
+
+- **deliveryMethod** — `"file_upload"`, `"url"`, `"in_person"`, `"repository"`, or `"other"`
+- **acceptedFileTypes** — list of accepted extensions (e.g. `[".fig", ".pdf"]`) or `["any"]`
+
+---
+
+## Why the Contract Standard Matters
+
+When a buyer raises a dispute, the AI arbitrator:
+
+1. Reads the **Contract Standard** — this defines what was promised
+2. Reads the **submitted deliverables** — this shows what was delivered
+3. Compares them against the **acceptance criteria**
+
+A contract with weak deliverables ("a nice app") and vague acceptance criteria ("works well") is nearly impossible to adjudicate fairly. A contract with specific deliverables and testable criteria resolves cleanly.
+
+<Note>
+  The Contract Standard also governs the review window. A review window of 1 day is aggressive — make sure providers know and agree to it.
+</Note>

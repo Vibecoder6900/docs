@@ -1,0 +1,116 @@
+---
+title: "Contracts API"
+description: "Post, browse, and manage contracts via the REST API."
+---
+
+## Browse Contracts
+
+```bash
+GET /api/v1/contracts
+```
+
+Public — no authentication required.
+
+**Query parameters:**
+
+| Param | Type | Description |
+|---|---|---|
+| `category` | string | Filter by category (e.g. "Tech") |
+| `pricing_type` | string | `"hourly"` or `"fixed"` |
+| `skills` | string | Comma-separated skills (e.g. `React,TypeScript`) |
+| `limit` | integer | Max results (default 20, max 100) |
+| `offset` | integer | Pagination offset |
+
+**Example:**
+```bash
+GET /api/v1/contracts?category=Tech&skills=React,TypeScript&limit=10
+```
+
+---
+
+## Post a Contract
+
+```bash
+POST /api/v1/contracts
+Authorization: Bearer jbly_...
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "title": "React dashboard for SaaS analytics tool",
+  "description": "We need a data visualization dashboard built in React with Recharts...",
+  "category": "Tech",
+  "pricing_type": "fixed",
+  "fixed_price": 8000,
+  "required_skills": ["React", "TypeScript", "Recharts"],
+  "location": "Remote",
+  "expires_at": "2026-04-01T00:00:00Z",
+  "contract_standard": {
+    "deadline": "2026-03-28",
+    "depositRequired": false,
+    "depositAmount": null,
+    "latePenalty": "2% per day after deadline",
+    "scopeSummary": "A deployed React dashboard with 6 chart types pulling from a mock API.",
+    "deliverables": [
+      "Deployed React app accessible at the agreed URL",
+      "6 chart components: line, bar, pie, scatter, area, heatmap",
+      "Mock API integration with sample dataset provided",
+      "Responsive layout working on desktop and tablet"
+    ],
+    "outOfScope": [
+      "Backend development",
+      "Real data integration",
+      "Mobile (phone) layout"
+    ],
+    "acceptanceCriteria": [
+      "All 6 chart types render without console errors in Chrome",
+      "Charts update correctly when date range filter changes",
+      "Layout is usable on 768px width without horizontal scroll"
+    ],
+    "reviewWindowDays": 7,
+    "deliveryMethod": "url",
+    "acceptedFileTypes": ["any"]
+  }
+}
+```
+
+<Note>
+  The `contract_standard` is required and must pass validation. See [Contracts](/features/contracts) for the full schema.
+</Note>
+
+---
+
+## Get a Contract
+
+```bash
+GET /api/v1/contracts/:id
+```
+
+Returns the contract with all proposals.
+
+---
+
+## Update a Contract
+
+```bash
+PATCH /api/v1/contracts/:id
+Authorization: Bearer jbly_...
+```
+
+You can update limited fields while the contract is still `open`:
+- `title`, `description`, `required_skills`, `expires_at`
+
+You cannot change pricing, category, or the Contract Standard after posting.
+
+---
+
+## Delete a Contract
+
+```bash
+DELETE /api/v1/contracts/:id
+Authorization: Bearer jbly_...
+```
+
+Only works while the contract is `open` (no accepted proposals). Deleting a contract with pending proposals declines all proposals and refunds bonds.

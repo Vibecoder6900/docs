@@ -1,0 +1,101 @@
+---
+title: "Posting a Contract"
+description: "How to write a contract that attracts strong proposals and holds up in disputes."
+---
+
+## What Makes a Good Contract
+
+A well-written contract does three things:
+1. Clearly describes what you need so providers can assess fit
+2. Sets enforceable terms so there's no ambiguity if something goes wrong
+3. Gives providers confidence that you're a serious, fair buyer
+
+<Warning>
+  The **Contract Standard** — the structured engagement terms — becomes the source of truth in any dispute. Vague deliverables and fuzzy acceptance criteria are unenforceable. Write them as if explaining to a third party with no context.
+</Warning>
+
+---
+
+## Contract Fields
+
+### Basic Information
+
+| Field | Description |
+|---|---|
+| **Title** | Short, descriptive headline (e.g. "React dashboard for SaaS app") |
+| **Description** | Full scope of work, background context, and any special requirements |
+| **Category** | Primary discipline — Tech, Design, Marketing, Legal, etc. |
+| **Required Skills** | Specific skills you need (e.g. React, TypeScript, Figma) |
+| **Location** | "Remote" or a specific place if in-person presence is needed |
+
+### Pricing
+
+<Tabs>
+  <Tab title="Hourly Rate">
+    Set a **required hours** estimate and an **hourly rate** in JOOBs. Providers may counter-propose a different rate or number of hours.
+
+    Best for: ongoing work, research, consulting, or anything where scope isn't fully defined.
+  </Tab>
+  <Tab title="Fixed Price">
+    Set a **fixed total price** in JOOBs. Providers propose to deliver the full scope for that amount.
+
+    Best for: well-defined deliverables with clear acceptance criteria.
+  </Tab>
+</Tabs>
+
+### The Contract Standard
+
+The Contract Standard is the formal agreement embedded in your contract. It's what gets enforced. Fill it out carefully.
+
+**Engagement Terms**
+- `deadline` — The date by which all work must be delivered (required)
+- `depositRequired` — Whether you require a deposit upfront
+- `depositAmount` — Amount in JOOBs if deposit is required
+- `latePenalty` — What happens if work is late (e.g. "5% per day after deadline") or `null`
+
+**Scope of Work**
+- `scopeSummary` — One or two sentences describing exactly what is being purchased
+- `deliverables` — A list of **specific, verifiable outputs**. Not "a website" — instead: "A deployed Next.js app accessible at the agreed URL, with a working login flow and dashboard."
+- `outOfScope` — Explicitly list what is NOT included. This prevents scope creep and protects both sides.
+
+**Acceptance Criteria**
+- `acceptanceCriteria` — A list of **pass/fail conditions**. Write each one as if explaining to a judge: "All listed features render correctly in Chrome and Firefox with no console errors."
+- `reviewWindowDays` — How many days you'll have to review the work after it's marked complete (1–90 days; default is 7)
+
+**Delivery**
+- `deliveryMethod` — How work will be handed off: `file_upload`, `url`, `in_person`, `repository`, or `other`
+- `acceptedFileTypes` — File formats you accept (e.g. `[".fig", ".pdf"]`) or `["any"]`
+
+---
+
+## Tips for Writing Deliverables
+
+<Tip>
+  Each deliverable should describe a **concrete artifact** that can be verified without subjective judgment.
+</Tip>
+
+**Weak (unenforceable):**
+- "A well-designed website"
+- "Marketing copy"
+- "Code cleanup"
+
+**Strong (enforceable):**
+- "A deployed Shopify storefront at the agreed domain with the 6 product pages listed in this contract, each with working Add to Cart functionality"
+- "Five 300-word blog posts in the provided brand voice guide, delivered as Google Docs with editing access"
+- "Refactored checkout module with 100% test coverage on the payment flow, confirmed by running the existing test suite"
+
+---
+
+## After You Post
+
+Once your contract is live:
+- It appears in the Browse Contracts feed immediately
+- Providers can view it and submit proposals
+- You'll receive a notification (and DM) when a proposal arrives
+- Contracts auto-expire after 7 days of inactivity if unfulfilled
+
+<Note>
+  You can delete a contract while it's still open (no accepted proposals). Once a proposal is accepted, the contract is locked.
+</Note>
+
+**Next:** [Reviewing Proposals →](/buyers/reviewing-proposals)

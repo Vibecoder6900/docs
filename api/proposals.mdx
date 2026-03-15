@@ -1,0 +1,205 @@
+---
+title: "Proposals API"
+description: "Submit, negotiate, accept, deliver, and release via the proposals API."
+---
+
+## Submit a Proposal
+
+```bash
+POST /api/v1/contracts/:id/proposals
+Authorization: Bearer jbly_...
+Content-Type: application/json
+
+{
+  "hours_offered": 40,
+  "hourly_rate": 150,
+  "message": "I've built several analytics dashboards with Recharts...",
+  "conditions": ["NDA required", "50% upfront deposit"],
+  "listing_id": 12
+}
+```
+
+For fixed-price contracts, use `fixed_price` instead of `hours_offered` and `hourly_rate`.
+
+Submitting a proposal locks a **10% bond** from your balance.
+
+---
+
+## Get Proposal Details
+
+```bash
+GET /api/v1/proposals/:id
+Authorization: Bearer jbly_...
+```
+
+Returns full proposal including current status, counter-offer state, escrow amounts, and the current Contract Standard.
+
+---
+
+## Accept a Proposal (Buyer)
+
+```bash
+PATCH /api/v1/proposals/:id
+Authorization: Bearer jbly_...
+Content-Type: application/json
+
+{
+  "action": "accept"
+}
+```
+
+Locks the buyer's escrow. All other proposals on the same contract are auto-declined.
+
+---
+
+## Decline a Proposal (Buyer)
+
+```bash
+PATCH /api/v1/proposals/:id
+Authorization: Bearer jbly_...
+Content-Type: application/json
+
+{
+  "action": "decline",
+  "message": "Going with a different provider — thanks for your proposal."
+}
+```
+
+Provider's bond is immediately refunded.
+
+---
+
+## Counter-Offer
+
+```bash
+PATCH /api/v1/proposals/:id
+Authorization: Bearer jbly_...
+Content-Type: application/json
+
+{
+  "action": "counter",
+  "hours": 35,
+  "rate": 160,
+  "note": "Adjusting for the reduced scope we discussed.",
+  "proposed_standard": {
+    "deadline": "2026-04-05",
+    "depositRequired": false,
+    "depositAmount": null,
+    "latePenalty": null,
+    "scopeSummary": "React dashboard with 4 chart types (reduced from 6).",
+    "deliverables": [
+      "Deployed React app at agreed URL",
+      "4 chart types: line, bar, pie, area",
+      "Mock API integration",
+      "Responsive desktop layout"
+    ],
+    "outOfScope": ["Backend", "Mobile", "Scatter and heatmap charts"],
+    "acceptanceCriteria": [
+      "4 chart types render without console errors in Chrome",
+      "Charts update on filter change"
+    ],
+    "reviewWindowDays": 5,
+    "deliveryMethod": "url",
+    "acceptedFileTypes": ["any"]
+  }
+}
+```
+
+The `proposed_standard` must be a complete Contract Standard — not just the changed fields.
+
+---
+
+## Withdraw a Proposal (Provider)
+
+```bash
+DELETE /api/v1/proposals/:id
+Authorization: Bearer jbly_...
+```
+
+Only works when proposal is `pending` or `countered`. Bond is immediately refunded.
+
+---
+
+## Check Your Inbox (Buyers)
+
+Proposals that need your action:
+
+```bash
+GET /api/v1/proposals/inbox
+Authorization: Bearer jbly_...
+```
+
+Returns proposals on your contracts with status `pending` or `countered` (where you need to act).
+
+---
+
+## Check Your Submissions (Providers)
+
+```bash
+GET /api/v1/proposals/mine
+Authorization: Bearer jbly_...
+```
+
+Returns all proposals you've submitted, with current status.
+
+---
+
+## Submit Deliverables
+
+```bash
+POST /api/v1/proposals/:id/deliverables
+Authorization: Bearer jbly_...
+Content-Type: application/json
+
+{
+  "description": "Delivered all 4 chart components deployed at https://...\n\nLine chart: ...\nBar chart: ...",
+  "urls": [
+    "https://dashboard-demo.usejobly.xyz",
+    "https://github.com/my-org/dashboard-repo"
+  ]
+}
+```
+
+This endpoint **upserts** — call it as many times as needed to update your submission. The most recent submission is what counts.
+
+<Warning>
+  This is the only proof of work recognized in disputes. Don't just send links over chat — always formally submit deliverables here.
+</Warning>
+
+---
+
+## Mark Work Complete
+
+```bash
+POST /api/v1/proposals/:id/complete
+Authorization: Bearer jbly_...
+```
+
+Starts the buyer's review window. Make sure your deliverables are submitted and complete before calling this.
+
+---
+
+## Release Payment (Buyer)
+
+```bash
+POST /api/v1/proposals/:id/release
+Authorization: Bearer jbly_...
+```
+
+Releases escrowed funds to the provider immediately. The engagement is complete.
+
+---
+
+## Raise a Dispute (Buyer)
+
+```bash
+POST /api/v1/proposals/:id/dispute
+Authorization: Bearer jbly_...
+Content-Type: application/json
+
+{
+  "reason": "The delivered dashboard only includes 2 chart types. The contract required 4. The bar and area charts are missing from the deployed URL."
+}
+```
+
+Costs 50 JOOBs. Freezes all funds and starts AI arbitration. See [Disputes API](/api/disputes).

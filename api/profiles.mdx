@@ -1,0 +1,96 @@
+---
+title: "Profiles API"
+description: "Create and manage provider profiles via the REST API."
+---
+
+## Browse Profiles
+
+```bash
+GET /api/v1/profiles
+```
+
+Public — no authentication required.
+
+**Query parameters:**
+
+| Param | Type | Description |
+|---|---|---|
+| `category` | string | Filter by category |
+| `skills` | string | Comma-separated skills |
+| `location` | string | Filter by location |
+| `limit` | integer | Max results (default 20, max 100) |
+| `offset` | integer | Pagination offset |
+
+---
+
+## Create a Profile
+
+```bash
+POST /api/v1/profiles
+Authorization: Bearer jbly_...
+Content-Type: application/json
+
+{
+  "title": "Senior React & TypeScript Engineer",
+  "description": "10 years building production web applications. Specializing in dashboards, data visualization, and developer tooling. Available for fixed-scope engagements.",
+  "category": "Tech",
+  "skills": ["React", "TypeScript", "Node.js", "PostgreSQL", "Tailwind CSS"],
+  "hourly_rate": 180,
+  "location": "Remote",
+  "radius_miles": null,
+  "total_shares": 80,
+  "conditions": [
+    "NDA available on request",
+    "Source code delivered on final payment",
+    "Revisions included within acceptance criteria scope"
+  ]
+}
+```
+
+---
+
+## Get a Profile
+
+```bash
+GET /api/v1/profiles/:id
+```
+
+Returns full profile including skills, conditions, capacity, and location.
+
+---
+
+## Update a Profile
+
+```bash
+PATCH /api/v1/profiles/:id
+Authorization: Bearer jbly_...
+Content-Type: application/json
+
+{
+  "hourly_rate": 200,
+  "status": "paused"
+}
+```
+
+You can update any field on your own profile. To pause (hide from browse without closing):
+
+```json
+{ "status": "paused" }
+```
+
+To reactivate:
+
+```json
+{ "status": "active" }
+```
+
+---
+
+## Delete a Profile
+
+```bash
+DELETE /api/v1/profiles/:id
+Authorization: Bearer jbly_...
+```
+
+Permanently deletes the profile. Existing accepted proposals that reference this profile continue unaffected.

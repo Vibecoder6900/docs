@@ -1,0 +1,96 @@
+---
+title: "Proposals"
+description: "How proposals work — submission, negotiation, lifecycle, and escrow."
+---
+
+## Proposal Lifecycle
+
+```
+pending → accepted → completed → released
+       ↘ countered ↗
+       ↘ declined  (terminal)
+       ↘ withdrawn (terminal)
+                    ↘ disputed → resolved
+```
+
+| Status | Meaning |
+|---|---|
+| `pending` | Submitted; buyer hasn't responded |
+| `countered` | Counter-offer in progress; one party must respond |
+| `accepted` | Buyer accepted; funds locked; work underway |
+| `declined` | Buyer declined; provider bond refunded |
+| `withdrawn` | Provider withdrew; bond refunded |
+| `completed` | Provider marked work done; review window running |
+| `released` | Payment released; engagement complete |
+| `disputed` | Dispute raised; funds frozen |
+
+---
+
+## Proposal Fields
+
+| Field | Type | Notes |
+|---|---|---|
+| `id` | integer | Unique proposal ID |
+| `contract_id` | integer | Parent contract |
+| `provider_id` | string | Provider's user ID |
+| `provider_name` | string | Display name |
+| `listing_id` | integer \| null | Linked provider profile (optional) |
+| `hours_offered` | number \| null | For hourly contracts |
+| `hourly_rate` | number \| null | Provider's proposed rate in JOOBs/hr |
+| `fixed_price` | number \| null | For fixed-price contracts |
+| `message` | string | Provider's pitch |
+| `conditions` | string[] | Provider's standard terms |
+| `status` | string | See lifecycle above |
+| `counter_by` | string \| null | Username of most recent counter |
+| `counter_hours` | number \| null | Latest countered hours |
+| `counter_rate` | number \| null | Latest countered rate |
+| `counter_note` | string \| null | Note attached to latest counter |
+| `proposed_standard` | object \| null | Revised Contract Standard from latest counter |
+| `provider_escrow_amount` | number | 10% bond locked from provider |
+| `buyer_escrow_amount` | number | Price + fee locked from buyer (when accepted) |
+
+---
+
+## Escrow Mechanics
+
+### Provider Bond (10%)
+
+When a provider submits a proposal, **10% of the proposed value** is locked from their JOOBs balance as a bond. This bond signals commitment and discourages spam proposals.
+
+The bond is:
+- **Refunded** if the proposal is declined, withdrawn, or the contract expires
+- **Kept** as a penalty if the provider abandons an accepted engagement
+
+### Buyer Escrow
+
+When the buyer accepts a proposal, **the agreed price + 2.5% platform fee** is locked from the buyer's balance.
+
+The escrowed funds are released when:
+- Buyer manually releases payment
+- Review window expires (auto-release)
+- Dispute resolves in provider's favor
+
+The 2.5% platform fee goes to Jobly regardless of outcome once the engagement is accepted.
+
+---
+
+## Counter-Offer Format
+
+Counter-offers must include a complete revised `proposed_standard` — not just the changed fields, but the full schema. This ensures both parties always have a complete, unambiguous record of the current terms.
+
+Along with the revised standard, a counter may include:
+- `hours` — revised hours offered
+- `rate` — revised hourly rate
+- `note` — a message explaining the changes
+
+A counter changes the proposal status to `countered` and records `counter_by` as the acting party. The other party must now respond.
+
+---
+
+## Automatic Behaviors
+
+**On acceptance:** All other `pending` or `countered` proposals on the same contract are automatically declined and their bonds refunded. A contract can only have one accepted proposal.
+
+**On expiry:** If a contract expires (7 days of inactivity) with pending proposals, all proposals are declined and bonds refunded.
+
+**On auto-release:** When a proposal reaches `completed` status and the review window passes without buyer action, the proposal moves to `released` and funds transfer to the provider.

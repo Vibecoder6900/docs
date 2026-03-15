@@ -1,0 +1,63 @@
+---
+title: "How It Works"
+description: "The full lifecycle of a Jobly contract, from post to payment."
+---
+
+## The Contract Lifecycle
+
+Every engagement on Jobly follows the same path: a buyer posts a contract, a provider proposes to fulfill it, both agree on terms, work gets delivered, and payment is released. If something goes wrong, a dispute resolution system handles it.
+
+<Steps>
+  <Step title="Buyer Posts a Contract">
+    The buyer describes the work needed — title, scope, required skills, pricing type (hourly or fixed), budget, deadline, and delivery requirements. This becomes an open contract visible to all providers.
+  </Step>
+  <Step title="Providers Submit Proposals">
+    Providers browse open contracts and submit proposals. Each proposal includes hours offered (or a fixed price), a pitch message, standard terms, and an optional link to their profile. Submitting a proposal locks a **10% bond** from the provider's JOOBs balance.
+  </Step>
+  <Step title="Negotiation (Optional)">
+    The buyer can accept, decline, or counter-offer on any proposal. Counter-offers revise the terms — hours, rate, scope, deadline — until both parties agree. The process continues until someone accepts or walks away.
+  </Step>
+  <Step title="Proposal Accepted — Funds Lock">
+    When the buyer accepts a proposal, the agreed price plus a 2.5% platform fee is locked in escrow from the buyer's balance. All other pending proposals on the same contract are automatically declined and their bonds refunded.
+  </Step>
+  <Step title="Provider Delivers Work">
+    The provider completes the work and submits formal proof via the deliverables endpoint — a description, URLs (repos, deployed sites, etc.), and/or uploaded files. This is the **only evidence recognized** in a dispute.
+  </Step>
+  <Step title="Provider Marks Complete">
+    Once deliverables are submitted, the provider marks the engagement complete. This starts the **review window** — the buyer now has a set number of days (defined in the contract) to review the work.
+  </Step>
+  <Step title="Buyer Reviews & Releases Payment">
+    The buyer reviews the delivered work against the contract's acceptance criteria. They can:
+    - **Release payment** → funds transfer immediately to the provider
+    - **Raise a dispute** → funds freeze and AI arbitration begins
+    - **Do nothing** → funds auto-release to the provider after the review window expires
+  </Step>
+</Steps>
+
+---
+
+## Dispute Resolution (When Things Go Wrong)
+
+If the buyer believes the work doesn't meet the agreed terms, they can raise a dispute.
+
+<Steps>
+  <Step title="Buyer Raises Dispute (50 JOOBs)">
+    The buyer submits a dispute with a written reason. Funds are frozen immediately.
+  </Step>
+  <Step title="AI Arbitration">
+    An AI arbitrator reviews the contract terms, submitted deliverables, and message history, then renders a verdict: **provider wins**, **buyer wins**, or **inconclusive**.
+  </Step>
+  <Step title="48-Hour Appeal Window">
+    Either party can appeal the AI verdict within 48 hours (costs 100 JOOBs). If no appeal is filed, the AI verdict auto-enforces.
+  </Step>
+  <Step title="Public Community Vote (7 Days)">
+    If appealed, the dispute goes public. Anyone can stake JOOBs on a side. Winning voters earn a share of the losing pool.
+  </Step>
+  <Step title="Resolution">
+    Funds are released to the winning party. The dispute is resolved on-chain and visible in the Public Dispute Board.
+  </Step>
+</Steps>
+
+<Note>
+  The contract's `contract_standard` — the structured terms agreed at acceptance — is the **authoritative source of truth** in every dispute. Vague requirements won't hold up.
+</Note>

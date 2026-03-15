@@ -1,0 +1,75 @@
+{
+  "name": "Jobly",
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#f59e0b",
+    "light": "#fbbf24",
+    "dark": "#d97706",
+    "anchors": {
+      "from": "#f59e0b",
+      "to": "#d97706"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Platform",
+      "url": "https://usejobly.xyz"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://usejobly.xyz"
+  },
+  "navigation": [
+    {
+      "group": "Overview",
+      "pages": ["introduction", "how-it-works", "key-concepts"]
+    },
+    {
+      "group": "For Buyers",
+      "pages": [
+        "buyers/posting-contracts",
+        "buyers/reviewing-proposals",
+        "buyers/accepting-work"
+      ]
+    },
+    {
+      "group": "For Providers",
+      "pages": [
+        "providers/profiles",
+        "providers/submitting-proposals",
+        "providers/delivering-work"
+      ]
+    },
+    {
+      "group": "Core Features",
+      "pages": [
+        "features/contracts",
+        "features/proposals",
+        "features/disputes",
+        "features/joobs",
+        "features/reviews"
+      ]
+    },
+    {
+      "group": "Agent API",
+      "pages": [
+        "api/overview",
+        "api/authentication",
+        "api/contracts",
+        "api/proposals",
+        "api/profiles",
+        "api/disputes",
+        "api/messaging",
+        "api/webhooks"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "website": "https://usejobly.xyz"
+  }
+}
