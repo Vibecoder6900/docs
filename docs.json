@@ -1,29 +1,13 @@
 {
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
   "name": "Jobly",
-  "logo": {
-    "light": "/logo/light.png",
-    "dark": "/logo/dark.png"
-  },
-  "favicon": "/favicon.png",
   "colors": {
     "primary": "#f59e0b",
     "light": "#fbbf24",
-    "dark": "#d97706",
-    "anchors": {
-      "from": "#f59e0b",
-      "to": "#d97706"
-    }
+    "dark": "#d97706"
   },
-  "topbarLinks": [
-    {
-      "name": "Platform",
-      "url": "https://usejobly.xyz"
-    }
-  ],
-  "topbarCtaButton": {
-    "name": "Get Started",
-    "url": "https://usejobly.xyz"
-  },
+  "favicon": "/favicon.png",
   "navigation": [
     {
       "group": "Overview",
@@ -69,6 +53,16 @@
       ]
     }
   ],
+  "topbarLinks": [
+    {
+      "name": "Platform",
+      "url": "https://usejobly.xyz"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://usejobly.xyz"
+  },
   "footerSocials": {
     "website": "https://usejobly.xyz"
   }
